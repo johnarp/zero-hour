@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zero Hour</title>
+<meta name="description" content="Zero Hour is a clean, customizable countdown for anything you are waiting for.">
+<meta name="theme-color" content="#0c0d11">
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- One stylesheet per family, so a single failed font never takes the rest down. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgl" id="bgl"><div class="l-color"></div><div class="l-img"></div><div class="l-scrim"></div></div>
+  <div class="content" id="content">
+    <div class="inner" id="inner">
+      <h1 class="title" id="title"></h1>
+      <div class="clock" id="clock" role="timer" aria-live="off"></div>
+      <p class="tagline" id="tagline"></p>
+    </div>
+  </div>
+  <div class="chrome" id="chrome">
+    <div>
+      <button class="chip" id="btnLib" aria-label="All countdowns"><svg class="i" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span class="t">Countdowns</span></button>
+    </div>
+    <div>
+      <button class="chip" id="btnEdit" aria-label="Edit this countdown"><svg class="i" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg><span class="t">Edit</span></button>
+      <button class="chip sq" id="btnFs" aria-label="Toggle fullscreen"><svg class="i" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    </div>
+  </div>
+  <div class="music" id="music" data-pos="bottom-center" hidden>
+    <button class="pp" id="musicBtn" aria-label="Play music"><svg class="ic-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 001.5.86l10.5-6.5a1 1 0 000-1.72L9.5 4.64A1 1 0 008 5.5z"/></svg><svg class="ic-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4.2" height="14" rx="1.2"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.2"/></svg></button>
+    <div class="eq" aria-hidden="true"><b></b><b></b><b></b><b></b></div>
+    <div class="mt"><span id="musicTitle">Music</span><small id="musicSub">Tap to play</small></div>
+  </div>
+</div>
+
+<section class="library" id="library" aria-label="Countdowns">
+  <div class="lib-head">
+    <button class="btn" id="libBack"><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+    <h1>Countdowns</h1>
+    <div class="row">
+      <select class="in" id="libSort" aria-label="Sort countdowns"><option value="soonest">Soonest first</option><option value="furthest">Furthest first</option><option value="name">Name A to Z</option><option value="added">Order added</option></select>
+      <button class="btn" id="btnImport"><svg class="i" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19h14"/></svg>Import</button>
+      <button class="btn" id="btnExport"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M5 19h14"/></svg>Export</button>
+    </div>
+  </div>
+  <div class="grid-wrap" id="grid"></div>
+</section>
+
+<aside class="sheet" id="sheet" aria-label="Edit countdown">
+  <div class="sheet-head"><h2>Edit countdown</h2><button class="btn primary sm" id="btnDone">Done</button></div>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="panes" id="panes"></div>
+  <div class="sheet-foot"><button class="btn" id="btnDup">Duplicate</button><button class="btn danger" id="btnDel">Delete</button></div>
+</aside>
+
+<dialog id="dlgExport"><div class="dlg">
+  <h3>Export countdowns</h3>
+  <p class="hint" id="expInfo"></p>
+  <textarea id="expText" readonly aria-label="Exported JSON"></textarea>
+  <div class="acts"><button class="btn" id="expClose">Close</button><button class="btn" id="expCopy">Copy JSON</button><button class="btn primary" id="expDl">Download .json</button></div>
+</div></dialog>
+<dialog id="dlgImport"><div class="dlg">
+  <h3>Import countdowns</h3>
+  <div class="filebtn"><button class="btn" id="impPick">Choose a .json file</button></div>
+  <input type="file" id="impFile" accept=".json,application/json" hidden>
+  <textarea id="impText" placeholder="Or paste exported JSON here" aria-label="JSON to import"></textarea>
+  <div class="radios"><label><input type="radio" name="impMode" value="add" checked> Add to my countdowns</label><label><input type="radio" name="impMode" value="replace"> Replace everything</label></div>
+  <p class="err" id="impErr" role="alert"></p>
+  <div class="acts"><button class="btn" id="impClose">Cancel</button><button class="btn primary" id="impGo">Import</button></div>
+</div></dialog>
+<div class="toast" id="toast" role="status"></div>
+<input type="file" id="imgFile" accept="image/*" hidden>
+
+<!-- Plain scripts (not ES modules) so the app also opens straight from a file. Order matters. -->
+<script src="js/data.js"></script>
+<script src="js/clock.js"></script>
+<script src="js/music.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
